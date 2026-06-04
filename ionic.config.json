@@ -1,0 +1,7 @@
+{
+  "name": "uma_estampa",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
