@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>O Meu Carrinho</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div *ngIf="itens.length === 0" class="empty-cart ion-text-center ion-padding">
+    <ion-icon name="basket-outline" style="font-size: 64px; color: #a0a0a0;"></ion-icon>
+    <p>O teu carrinho ainda está vazio.</p>
+    <ion-button fill="clear" routerLink="/home">Voltar à Home</ion-button>
+  </div>
+
+  <div class="cart-items" *ngIf="itens.length > 0">
+    <div class="cart-item" *ngFor="let item of itens">
+      <div class="item-image">
+        <img [src]="item.produto.imagem" />
+      </div>
+      <div class="item-info">
+        <h2>{{ item.produto.nome }}</h2>
+        <p class="item-details">Tamanho: {{ item.tamanho }} | Cor: {{ item.cor }}</p>
+        <p class="item-price">{{ item.produto.preco * item.quantidade | currency:'EUR' }}</p>
+      </div>
+      <div class="item-actions">
+        <div class="quantity-controls">
+          <ion-button fill="clear" (click)="diminuirQtd(item)" class="qty-btn">-</ion-button>
+          <span class="qty-value">{{ item.quantidade }}</span>
+          <ion-button fill="clear" (click)="aumentarQtd(item)" class="qty-btn">+</ion-button>
+        </div>
+        <ion-button fill="clear" color="danger" (click)="removerItem(item)" class="delete-btn">
+          <ion-icon slot="icon-only" name="trash"></ion-icon>
+        </ion-button>
+      </div>
+    </div>
+  </div>
+
+  <div class="cart-summary ion-margin-top" *ngIf="itens.length > 0">
+    <ion-row class="ion-align-items-center">
+      <ion-col><h3>Total:</h3></ion-col>
+      <ion-col class="ion-text-end"><h3>{{ precoTotal | currency:'EUR' }}</h3></ion-col>
+    </ion-row>
+    <ion-button expand="block" color="success" routerLink="/encomenda" class="ion-margin-top">
+      Proceder para o Pagamento
+    </ion-button>
+  </div>
+</ion-content>

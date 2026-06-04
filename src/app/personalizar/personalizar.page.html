@@ -1,0 +1,58 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Personalizar</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div *ngIf="produto" style="text-align: center; margin: 10px 0;">
+    <ion-card>
+      <img [src]="produto.imagem" alt="{{ produto.nome }}" />
+      <ion-card-header>
+        <ion-card-title>{{ produto.nome }}</ion-card-title>
+        <ion-card-subtitle>{{ produto.categoria }}</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="price">{{ produto.preco | currency:'EUR':'symbol':'1.2-2' }}</div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <div style="text-align: center; margin: 20px 0;">
+    <div [style.background-color]="corTshirt" style="width: 200px; height: 200px; margin: 0 auto; position: relative; border-radius: 8px;">
+      <img src="assets/images/mockup_blank.png" style="width: 100%; height: 100%; object-fit: cover;" />
+      <div *ngIf="imagemEstampa" style="position: absolute; top: 30%; left: 25%; width: 50%; height: 40%;">
+        <img [src]="imagemEstampa" style="width: 100%; height: 100%; object-fit: contain;" />
+      </div>
+    </div>
+  </div>
+
+  <ion-list lines="none">
+    <ion-item>
+      <ion-label>Cor da T-shirt</ion-label>
+      <ion-select [(ngModel)]="corTshirt">
+        <ion-select-option value="#ffffff">Branco</ion-select-option>
+        <ion-select-option value="#1a1a1a">Preto</ion-select-option>
+        <ion-select-option value="#b0b0b0">Cinza</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item class="ion-margin-top">
+      <div style="width: 100%;">
+        <label style="display: block; text-align: center; padding: 24px; background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 12px; cursor: pointer; transition: all 0.3s;">
+          <ion-icon name="cloud-upload" style="font-size: 32px; color: #6366f1; display: block; margin-bottom: 8px;"></ion-icon>
+          <span style="color: #0f172a; font-weight: 600; display: block;">Escolher Imagem</span>
+          <span style="color: #64748b; font-size: 12px; display: block; margin-top: 4px;">Clique para selecionar uma imagem</span>
+          <input type="file" (change)="upload($event)" accept="image/*" style="display: none;" />
+        </label>
+      </div>
+    </ion-item>
+  </ion-list>
+
+  <ion-button expand="block" color="primary" class="ion-margin-top" (click)="salvar()">
+    Adicionar Customização
+  </ion-button>
+</ion-content>

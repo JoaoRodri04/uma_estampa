@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/carrinho"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Checkout</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form (ngSubmit)="concluirPedido()">
+    <ion-list lines="inset">
+      <ion-list-header><h5>Dados de Entrega</h5></ion-list-header>
+      <ion-item>
+        <ion-input label="Nome" labelPlacement="floating" type="text" [(ngModel)]="dados.nome" name="nome" required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input label="Morada" labelPlacement="floating" type="text" [(ngModel)]="dados.morada" name="morada" required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input label="Código Postal" labelPlacement="floating" type="text" [(ngModel)]="dados.cp" name="cp" required></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <ion-list lines="none" class="ion-margin-top">
+      <ion-list-header><h5>Pagamento</h5></ion-list-header>
+      <ion-radio-group [(ngModel)]="pagamento" name="pagamento">
+        <ion-item><ion-radio value="mbway">MB WAY</ion-radio></ion-item>
+        <ion-item><ion-radio value="multibanco">Multibanco</ion-radio></ion-item>
+      </ion-radio-group>
+    </ion-list>
+
+    <ion-button expand="block" color="success" type="submit" class="ion-margin-top">
+      Finalizar Encomenda
+    </ion-button>
+  </form>
+</ion-content>

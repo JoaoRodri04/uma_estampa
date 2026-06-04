@@ -1,20 +1,43 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+﻿<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start"><ion-menu-button></ion-menu-button></ion-buttons>
+    <ion-title>Uma Estampa</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content fullscreen class="home-page">
+  <section class="hero">
+    <div>
+      <p class="eyebrow">Personalize os Seus Artigos</p>
+      <h1>Transforme as suas fotos em produtos únicos.</h1>
+      <p>Escolha um produto, personalize o seu design e receba a sua encomenda com estilo.</p>
+    </div>
+    <ion-button expand="block" color="secondary" routerLink="/personalizar">Personalizar agora</ion-button>
+  </section>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+  <section class="produtos-section">
+    <div class="section-header">
+      <div>
+        <h2>Produtos em destaque</h2>
+        <p>Veja algumas opções que pode personalizar com a sua arte.</p>
+      </div>
+      <ion-button fill="outline" size="small" routerLink="/catalogo">Ver catálogo completo</ion-button>
+    </div>
+
+    <div class="produtos-grid">
+      <ion-card *ngFor="let produto of produtos" class="produto-card">
+        <img [src]="produto.imagem" alt="{{ produto.nome }}" />
+        <ion-card-header>
+          <ion-card-subtitle>{{ produto.categoria }}</ion-card-subtitle>
+          <ion-card-title>{{ produto.nome }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="card-footer">
+            <span class="price">{{ produto.preco | currency:'EUR':'symbol':'1.2-2' }}</span>
+            <ion-button fill="clear" size="small" [routerLink]="['/personalizar', produto.id]">Personalizar</ion-button>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </section>
 </ion-content>

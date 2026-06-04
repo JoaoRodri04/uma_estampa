@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/catalogo"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Detalhes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding" *ngIf="produto">
+  <div style="text-align: center;">
+    <img [src]="produto.imagem" style="max-height: 250px; object-fit: contain;"/>
+  </div>
+
+  <h2>{{ produto.nome }}</h2>
+  <h3 style="color: var(--ion-color-success);">{{ produto.preco | currency:'EUR' }}</h3>
+  <p>{{ produto.descricao }}</p>
+
+  <ion-item class="ion-margin-top">
+    <ion-label>Tamanho</ion-label>
+    <ion-select placeholder="Escolhe" [(ngModel)]="tamanho">
+      <ion-select-option value="S">S</ion-select-option>
+      <ion-select-option value="M">M</ion-select-option>
+      <ion-select-option value="L">L</ion-select-option>
+      <ion-select-option value="XL">XL</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>Cor</ion-label>
+    <ion-select placeholder="Escolhe" [(ngModel)]="cor">
+      <ion-select-option value="Branco">Branco</ion-select-option>
+      <ion-select-option value="Preto">Preto</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <ion-button expand="block" color="success" class="ion-margin-top" (click)="adicionarAoCarrinho()">
+    Adicionar ao Carrinho
+  </ion-button>
+</ion-content>

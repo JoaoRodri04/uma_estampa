@@ -11,6 +11,38 @@ const routes: Routes = [
     redirectTo: 'home',
     pathMatch: 'full'
   },
+  {
+    path: 'carrinho',
+    loadChildren: () => import('./carrinho/carrinho.module').then( m => m.CarrinhoPageModule)
+  },
+  {
+    path: 'catalogo',
+    loadChildren: () => import('./catalogo/catalogo.module').then( m => m.CatalogoPageModule)
+  },
+  {
+    path: 'conta',
+    loadChildren: () => import('./conta/conta.module').then( m => m.ContaPageModule)
+  },
+  {
+    path: 'encomenda',
+    loadChildren: () => import('./encomenda/encomenda.module').then( m => m.EncomendaPageModule)
+  },
+  {
+    path: 'personalizar',
+    loadChildren: () => import('./personalizar/personalizar.module').then( m => m.PersonalizarPageModule)
+  },
+  {
+    path: 'personalizar/:id',
+    loadChildren: () => import('./personalizar/personalizar.module').then( m => m.PersonalizarPageModule)
+  },
+  {
+    path: 'sobre',
+    loadChildren: () => import('./sobre/sobre.module').then( m => m.SobrePageModule)
+  },
+  {
+    path: 'produto-detalhe',
+    loadChildren: () => import('./produto-detalhe/produto-detalhe.module').then( m => m.ProdutoDetalhePageModule)
+  },
 ];
 
 @NgModule({
