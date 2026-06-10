@@ -4,8 +4,169 @@
     <ion-title>Perfil</ion-title>
   </ion-toolbar>
 </ion-header>
-<ion-content class="ion-padding">
-  <ion-list>
-    <ion-item><ion-label><h2>Utilizador Convidado</h2><p>suporte@umaestampa.pt</p></ion-label></ion-item>
-  </ion-list>
+<ion-content class="ion-padding conta-content">
+  <!-- Utilizador Autenticado -->
+  <div *ngIf="usuarioAutenticado" class="perfil-autenticado">
+    <ion-card>
+      <ion-card-header>
+        <div class="avatar">
+          <ion-icon name="person-circle"></ion-icon>
+        </div>
+      </ion-card-header>
+      <ion-card-content>
+        <h2>{{ usuarioLogado.nome }}</h2>
+        <p>{{ usuarioLogado.email }}</p>
+        
+        <ion-button expand="block" color="danger" (click)="logout()" class="logout-btn">
+          <ion-icon name="log-out" slot="start"></ion-icon>
+          Sair da Conta
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Login e Registro -->
+  <div *ngIf="!usuarioAutenticado" class="auth-section">
+    <!-- Toggle entre Login e Registro -->
+    <div class="modo-toggle">
+      <button 
+        [class.ativo]="modoLogin" 
+        (click)="trocarModo(true)"
+        class="toggle-btn">
+        Entrar
+      </button>
+      <button 
+        [class.ativo]="!modoLogin" 
+        (click)="trocarModo(false)"
+        class="toggle-btn">
+        Registar
+      </button>
+    </div>
+
+    <!-- FORMULÁRIO DE LOGIN -->
+    <form *ngIf="modoLogin" [formGroup]="loginForm" (ngSubmit)="fazerLogin()" class="auth-form">
+      <h2>Bem-vindo de volta</h2>
+      <p class="subtitle">Faça login na sua conta para continuar</p>
+
+      <ion-item class="input-item">
+        <ion-label position="floating">Email</ion-label>
+        <ion-input 
+          type="email" 
+          formControlName="email"
+          placeholder="seu@email.com">
+        </ion-input>
+      </ion-item>
+      <ion-text *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" color="danger">
+        <p class="error-msg">Email inválido</p>
+      </ion-text>
+
+      <ion-item class="input-item">
+        <ion-label position="floating">Palavra-passe</ion-label>
+        <ion-input 
+          [type]="mostrarSenhaLogin ? 'text' : 'password'" 
+          formControlName="senha"
+          placeholder="••••••••">
+        </ion-input>
+        <ion-button 
+          fill="clear" 
+          slot="end" 
+          (click)="mostrarSenhaLogin = !mostrarSenhaLogin">
+          <ion-icon [name]="mostrarSenhaLogin ? 'eye-off' : 'eye'"></ion-icon>
+        </ion-button>
+      </ion-item>
+      <ion-text *ngIf="loginForm.get('senha')?.invalid && loginForm.get('senha')?.touched" color="danger">
+        <p class="error-msg">Palavra-passe obrigatória</p>
+      </ion-text>
+
+      <ion-button 
+        expand="block" 
+        type="submit" 
+        [disabled]="loginForm.invalid"
+        class="submit-btn">
+        <ion-icon name="log-in" slot="start"></ion-icon>
+        Entrar
+      </ion-button>
+
+      <ion-text *ngIf="mensagemErro" color="danger" class="alerta">
+        <p>{{ mensagemErro }}</p>
+      </ion-text>
+    </form>
+
+    <!-- FORMULÁRIO DE REGISTRO -->
+    <form *ngIf="!modoLogin" [formGroup]="registroForm" (ngSubmit)="fazerRegistro()" class="auth-form">
+      <h2>Criar Conta</h2>
+      <p class="subtitle">Junte-se a nós e comece a personalizar</p>
+
+      <ion-item class="input-item">
+        <ion-label position="floating">Nome Completo</ion-label>
+        <ion-input 
+          type="text" 
+          formControlName="nome"
+          placeholder="Seu nome completo">
+        </ion-input>
+      </ion-item>
+      <ion-text *ngIf="registroForm.get('nome')?.invalid && registroForm.get('nome')?.touched" color="danger">
+        <p class="error-msg">Nome é obrigatório</p>
+      </ion-text>
+
+      <ion-item class="input-item">
+        <ion-label position="floating">Email</ion-label>
+        <ion-input 
+          type="email" 
+          formControlName="email"
+          placeholder="seu@email.com">
+        </ion-input>
+      </ion-item>
+      <ion-text *ngIf="registroForm.get('email')?.invalid && registroForm.get('email')?.touched" color="danger">
+        <p class="error-msg">Email inválido</p>
+      </ion-text>
+
+      <ion-item class="input-item">
+        <ion-label position="floating">Palavra-passe</ion-label>
+        <ion-input 
+          [type]="mostrarSenhaRegistro ? 'text' : 'password'" 
+          formControlName="senha"
+          placeholder="••••••••">
+        </ion-input>
+        <ion-button 
+          fill="clear" 
+          slot="end" 
+          (click)="mostrarSenhaRegistro = !mostrarSenhaRegistro">
+          <ion-icon [name]="mostrarSenhaRegistro ? 'eye-off' : 'eye'"></ion-icon>
+        </ion-button>
+      </ion-item>
+      <ion-text *ngIf="registroForm.get('senha')?.invalid && registroForm.get('senha')?.touched" color="danger">
+        <p class="error-msg">Palavra-passe deve ter pelo menos 6 caracteres</p>
+      </ion-text>
+
+      <ion-item class="input-item">
+        <ion-label position="floating">Confirmar Palavra-passe</ion-label>
+        <ion-input 
+          [type]="mostrarSenhaRegistro ? 'text' : 'password'" 
+          formControlName="confirmarSenha"
+          placeholder="••••••••">
+        </ion-input>
+      </ion-item>
+      <ion-text *ngIf="registroForm.get('confirmarSenha')?.invalid && registroForm.get('confirmarSenha')?.touched" color="danger">
+        <p class="error-msg">Confirme a palavra-passe</p>
+      </ion-text>
+
+      <ion-text *ngIf="senhasNaoCorrespondem && registroForm.get('confirmarSenha')?.touched" color="danger">
+        <p class="error-msg">As palavras-passe não correspondem</p>
+      </ion-text>
+
+      <ion-button 
+        expand="block" 
+        type="submit" 
+        [disabled]="registroForm.invalid || senhasNaoCorrespondem"
+        class="submit-btn">
+        <ion-icon name="person-add" slot="start"></ion-icon>
+        Criar Conta
+      </ion-button>
+
+      <ion-text *ngIf="mensagemErro" color="danger" class="alerta">
+        <p>{{ mensagemErro }}</p>
+      </ion-text>
+    </form>
+  </div>
 </ion-content>

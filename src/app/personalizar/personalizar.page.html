@@ -22,17 +22,22 @@
   </div>
 
   <div style="text-align: center; margin: 20px 0;">
-    <div [style.background-color]="corTshirt" style="width: 200px; height: 200px; margin: 0 auto; position: relative; border-radius: 8px;">
-      <img src="assets/images/mockup_blank.png" style="width: 100%; height: 100%; object-fit: cover;" />
-      <div *ngIf="imagemEstampa" style="position: absolute; top: 30%; left: 25%; width: 50%; height: 40%;">
-        <img [src]="imagemEstampa" style="width: 100%; height: 100%; object-fit: contain;" />
+    <div [style.background-color]="corTshirt" style="width: 200px; height: 200px; margin: 0 auto; position: relative; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-direction: column; overflow: hidden;">
+      <img src="assets/images/mockup_blank.png" style="width: 100%; height: 100%; object-fit: cover; position: absolute;" />
+      <div style="position: absolute; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; flex-direction: column; z-index: 10;">
+        <div *ngIf="imagemEstampa" style="position: absolute; top: 30%; left: 25%; width: 50%; height: 40%;">
+          <img [src]="imagemEstampa" style="width: 100%; height: 100%; object-fit: contain;" />
+        </div>
+        <div *ngIf="textoPersonalizacao" [style.fontSize.px]="tamanhoTexto" style="color: #000; font-weight: bold; text-align: center; padding: 10px; max-width: 150px; word-wrap: break-word; z-index: 20;">
+          {{ textoPersonalizacao }}
+        </div>
       </div>
     </div>
   </div>
 
   <ion-list lines="none">
     <ion-item>
-      <ion-label>Cor da T-shirt</ion-label>
+      <ion-label>Cor</ion-label>
       <ion-select [(ngModel)]="corTshirt">
         <ion-select-option value="#ffffff">Branco</ion-select-option>
         <ion-select-option value="#1a1a1a">Preto</ion-select-option>
@@ -49,6 +54,32 @@
           <input type="file" (change)="upload($event)" accept="image/*" style="display: none;" />
         </label>
       </div>
+    </ion-item>
+
+    <ion-item class="ion-margin-top">
+      <ion-label position="floating">Adicionar Texto</ion-label>
+      <ion-input 
+        [(ngModel)]="textoPersonalizacao" 
+        placeholder="Digite seu texto"
+        maxlength="30">
+      </ion-input>
+    </ion-item>
+
+    <ion-item *ngIf="textoPersonalizacao" class="ion-margin-top">
+      <ion-label>Tamanho do Texto</ion-label>
+      <ion-range 
+        [(ngModel)]="tamanhoTexto"
+        min="12"
+        max="48"
+        step="2"
+        style="width: 100%;">
+        <ion-label slot="start">12</ion-label>
+        <ion-label slot="end">48</ion-label>
+      </ion-range>
+    </ion-item>
+
+    <ion-item *ngIf="textoPersonalizacao" class="ion-margin-top">
+      <ion-label>Tamanho: {{ tamanhoTexto }}px</ion-label>
     </ion-item>
   </ion-list>
 

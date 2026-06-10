@@ -18,6 +18,8 @@ import { ProductService, Produto } from '../services/product.service';
 export class PersonalizarPage implements OnInit {
   public corTshirt: string = '#ffffff';
   public imagemEstampa: string | null = null;
+  public textoPersonalizacao: string = '';
+  public tamanhoTexto: number = 24;
   public produto: Produto | null = null;
 
   constructor(
@@ -63,8 +65,10 @@ export class PersonalizarPage implements OnInit {
         imagem: this.imagemEstampa || baseProduct.imagem
       },
       tamanho: 'L',
-      cor: this.corTshirt === '#ffffff' ? 'Branco' : 'Preto',
-      quantidade: 1
+      cor: this.corTshirt === '#ffffff' ? 'Branco' : this.corTshirt === '#1a1a1a' ? 'Preto' : 'Cinza',
+      quantidade: 1,
+      texto: this.textoPersonalizacao,
+      tamanhoTexto: this.tamanhoTexto
     });
     await this.storageService.set('carrinho', cart);
 

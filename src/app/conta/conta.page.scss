@@ -1,0 +1,199 @@
+.conta-content {
+  --padding-start: 1rem;
+  --padding-end: 1rem;
+  --padding-top: 1rem;
+  --padding-bottom: 1rem;
+}
+
+// Perfil Autenticado
+.perfil-autenticado {
+  margin-top: 1rem;
+
+  ion-card {
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+
+    ion-card-header {
+      padding: 2rem 1.5rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    ion-card-content {
+      text-align: center;
+      padding: 1.5rem;
+
+      h2 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin: 1rem 0 0.5rem 0;
+        color: #333;
+      }
+
+      p {
+        color: #666;
+        font-size: 0.95rem;
+        margin: 0 0 1.5rem 0;
+      }
+    }
+  }
+
+  .avatar {
+    ion-icon {
+      font-size: 4rem;
+      color: #fff;
+    }
+  }
+
+  .logout-btn {
+    --background: #ff6b6b;
+    --box-shadow: none;
+    margin-top: 1rem;
+    border-radius: 8px;
+
+    &:active {
+      --background: #ff5252;
+    }
+  }
+}
+
+// Seção de Autenticação
+.auth-section {
+  max-width: 100%;
+}
+
+// Toggle entre Login e Registro
+.modo-toggle {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  background: #f5f5f5;
+  padding: 0.5rem;
+  border-radius: 8px;
+
+  .toggle-btn {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: none;
+    background: transparent;
+    color: #666;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+
+    &.ativo {
+      background: #fff;
+      color: #667eea;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+}
+
+// Formulário de Autenticação
+.auth-form {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
+
+  .subtitle {
+    text-align: center;
+    color: #999;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .input-item {
+    --padding-start: 0;
+    --padding-end: 0;
+    --inner-padding-end: 0;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #f0f0f0;
+    --highlight-color-focus: #667eea;
+
+    ion-label {
+      color: #999;
+      font-size: 0.85rem;
+    }
+
+    ion-input {
+      --padding-top: 0.5rem;
+      --padding-bottom: 0.5rem;
+      color: #333;
+      font-size: 0.95rem;
+
+      &::placeholder {
+        color: #ccc;
+      }
+    }
+  }
+
+  .error-msg {
+    font-size: 0.75rem;
+    margin: -0.8rem 0 1rem 0;
+    padding-left: 0.5rem;
+  }
+
+  .submit-btn {
+    --background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --box-shadow: none;
+    margin-top: 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    height: 48px;
+
+    &:disabled {
+      --background: #ccc;
+      opacity: 0.6;
+    }
+
+    &:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+  }
+
+  .alerta {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: #ffe6e6;
+    border-radius: 6px;
+    text-align: center;
+
+    p {
+      margin: 0;
+      font-size: 0.85rem;
+    }
+  }
+}
+
+// Responsivo
+@media (min-width: 576px) {
+  .auth-form {
+    max-width: 420px;
+    margin: 0 auto;
+  }
+
+  .perfil-autenticado {
+    ion-card {
+      max-width: 400px;
+      margin: 2rem auto 0;
+    }
+  }
+}
