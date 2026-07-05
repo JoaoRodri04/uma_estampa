@@ -13,8 +13,9 @@ import { MeusDesignsPage } from './meus-designs.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    MeusDesignsPageRoutingModule
+    MeusDesignsPageRoutingModule,
+    MeusDesignsPage
   ],
-  declarations: [MeusDesignsPage]
+  declarations: []
 })
 export class MeusDesignsPageModule {}
