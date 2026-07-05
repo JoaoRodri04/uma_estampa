@@ -21,6 +21,61 @@ div[style*="text-align: center"] {
   }
 }
 
+.preview-box {
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+  position: relative;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.preview-base {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+}
+
+.preview-overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 10;
+}
+
+.preview-image-wrapper {
+  position: absolute;
+  top: 30%;
+  left: 25%;
+  width: 50%;
+  height: 40%;
+}
+
+.preview-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.preview-text {
+  color: #000;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
+  max-width: 150px;
+  word-wrap: break-word;
+  z-index: 20;
+}
+
 ion-list {
   background: transparent;
 }
@@ -55,6 +110,13 @@ ion-item {
     --knob-border-radius: 50%;
     --knob-size: 24px;
   }
+}
+
+.upload-actions {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 input[type="file"] {

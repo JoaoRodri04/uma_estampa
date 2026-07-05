@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/personalizar"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Guardados</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div *ngIf="designs.length === 0" class="empty-state">
+    <ion-icon name="bookmark-outline" size="large"></ion-icon>
+    <h3>Nenhuma personalização guardada</h3>
+    <p>Guarde uma personalização na página de personalização para vê-la aqui.</p>
+  </div>
+
+  <ion-list *ngIf="designs.length > 0">
+    <ion-item *ngFor="let design of designs">
+      <ion-thumbnail slot="start" *ngIf="design.imagem">
+        <img [src]="design.imagem" />
+      </ion-thumbnail>
+      <ion-label>
+        <h2>{{ design.produto?.nome || 'Personalização' }}</h2>
+        <p *ngIf="design.texto">{{ design.texto }}</p>
+        <p *ngIf="!design.texto">Sem texto</p>
+      </ion-label>
+      <ion-buttons slot="end">
+        <ion-button color="primary" (click)="abrirDesign(design)">
+          <ion-icon slot="icon-only" name="open-outline"></ion-icon>
+        </ion-button>
+        <ion-button color="danger" (click)="removerDesign(design.id)">
+          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+  </ion-list>
+</ion-content>
