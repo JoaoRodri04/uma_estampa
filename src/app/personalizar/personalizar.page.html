@@ -28,23 +28,29 @@
   </div>
 
   <div style="text-align: center; margin: 20px 0;">
-    <div [style.background-color]="corTshirt" class="preview-box">
-      <!-- <img src="assets/images/mockup_blank.png" class="preview-base" /> -->
-       <p>Preview</p>
-      <div class="preview-overlay">
-        <div *ngIf="hasImagem" class="preview-image-wrapper">
-          <img [src]="imagemEstampa" class="preview-image" />
-        </div>
-        <div *ngIf="textoPersonalizacao" [style.fontSize.px]="tamanhoTexto" class="preview-text">
-          {{ textoPersonalizacao }}
-        </div>
+    <div [style.background-color]="corTshirt" style="width: 200px; height: 200px; margin: 0 auto; position: relative; border-radius: 8px;">
+      <img src="assets/images/mockup_blank.png" style="width: 100%; height: 100%; object-fit: cover;" />
+      <div *ngIf="imagemEstampa" style="position: absolute; top: 30%; left: 25%; width: 50%; height: 40%;">
+        <img [src]="imagemEstampa" style="width: 100%; height: 100%; object-fit: contain;" />
       </div>
     </div>
   </div>
 
   <ion-list lines="none">
+
+    <!-- Nome do design -->
+    <ion-item class="ion-margin-bottom">
+      <ion-input
+        label="Nome do Design"
+        labelPlacement="floating"
+        [(ngModel)]="nomeDesign"
+        placeholder="Ex: Camisola Verão 2025"
+      ></ion-input>
+    </ion-item>
+
+    <!-- Cor -->
     <ion-item>
-      <ion-label>Cor</ion-label>
+      <ion-label>Cor da T-shirt</ion-label>
       <ion-select [(ngModel)]="corTshirt">
         <ion-select-option value="#ffffff">Branco</ion-select-option>
         <ion-select-option value="#1a1a1a">Preto</ion-select-option>
@@ -52,13 +58,22 @@
       </ion-select>
     </ion-item>
 
-    <ion-item class="ion-margin-top">
-      <div class="upload-actions">
-        <ion-button expand="block" fill="outline" color="primary" (click)="tirarFoto()">
-          <ion-icon slot="start" name="camera"></ion-icon>
-          Tirar Foto
-        </ion-button>
+    <!-- Tamanho -->
+    <ion-item>
+      <ion-label>Tamanho</ion-label>
+      <ion-select [(ngModel)]="tamanho">
+        <ion-select-option value="XS">XS</ion-select-option>
+        <ion-select-option value="S">S</ion-select-option>
+        <ion-select-option value="M">M</ion-select-option>
+        <ion-select-option value="L">L</ion-select-option>
+        <ion-select-option value="XL">XL</ion-select-option>
+        <ion-select-option value="XXL">XXL</ion-select-option>
+      </ion-select>
+    </ion-item>
 
+    <!-- Upload imagem -->
+    <ion-item class="ion-margin-top">
+      <div style="width: 100%;">
         <label style="display: block; text-align: center; padding: 24px; background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 12px; cursor: pointer; transition: all 0.3s;">
           <ion-icon name="cloud-upload" style="font-size: 32px; color: #6366f1; display: block; margin-bottom: 8px;"></ion-icon>
           <span style="color: #0f172a; font-weight: 600; display: block;">Escolher Imagem</span>
@@ -67,39 +82,20 @@
         </label>
       </div>
     </ion-item>
-
-    <ion-item class="ion-margin-top">
-      <ion-label position="floating">Adicionar Texto</ion-label>
-      <ion-input 
-        [(ngModel)]="textoPersonalizacao" 
-        placeholder="Digite seu texto"
-        maxlength="30">
-      </ion-input>
-    </ion-item>
-
-    <ion-item *ngIf="textoPersonalizacao" class="ion-margin-top">
-      <ion-label>Tamanho do Texto</ion-label>
-      <ion-range 
-        [(ngModel)]="tamanhoTexto"
-        min="12"
-        max="48"
-        step="2"
-        style="width: 100%;">
-        <ion-label slot="start">12</ion-label>
-        <ion-label slot="end">48</ion-label>
-      </ion-range>
-    </ion-item>
-
-    <ion-item *ngIf="textoPersonalizacao" class="ion-margin-top">
-      <ion-label>Tamanho: {{ tamanhoTexto }}px</ion-label>
-    </ion-item>
   </ion-list>
 
-  <ion-button expand="block" color="secondary" class="ion-margin-top" (click)="guardarPersonalizacao()">
-    Guardar Personalização
-  </ion-button>
+  <!-- Botões de ação -->
+  <div class="action-section ion-margin-top">
+    <p class="action-label">O que queres fazer com este design?</p>
 
-  <ion-button expand="block" color="primary" class="ion-margin-top" (click)="salvar()">
-    Adicionar Personalização ao Carrinho
-  </ion-button>
+    <ion-button expand="block" color="primary" (click)="salvar()">
+      <ion-icon slot="start" name="cart-outline"></ion-icon>
+      Adicionar ao Carrinho
+    </ion-button>
+
+    <ion-button expand="block" fill="outline" color="primary" class="ion-margin-top" (click)="guardarApenas()">
+      <ion-icon slot="start" name="bookmark-outline"></ion-icon>
+      Guardar em Meus Designs
+    </ion-button>
+  </div>
 </ion-content>

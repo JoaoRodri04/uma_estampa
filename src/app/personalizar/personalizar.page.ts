@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 import { ProductService, Produto } from '../services/product.service';
-import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { Design } from '../meus-designs/meus-designs.page';
 
 @Component({
   selector: 'app-personalizar',
@@ -19,46 +19,23 @@ import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 export class PersonalizarPage implements OnInit {
   public corTshirt: string = '#ffffff';
   public imagemEstampa: string | null = null;
-  public hasImagem: boolean = false;
-  public textoPersonalizacao: string = '';
-  public tamanhoTexto: number = 24;
   public produto: Produto | null = null;
+  public nomeDesign: string = '';
+  public tamanho: string = 'L';
 
   constructor(
     private storageService: AppStorageService,
     private router: Router,
     private toastCtrl: ToastController,
     private route: ActivatedRoute,
-    private productService: ProductService,
-    private cdr: ChangeDetectorRef
+    private productService: ProductService
   ) {}
 
-  private atualizarImagem(value: string | null) {
-    this.imagemEstampa = value;
-    this.hasImagem = !!value && value.trim().length > 0;
-    this.cdr.detectChanges();
-  }
-
-  async ngOnInit() {
+  ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       const p = this.productService.getById(id);
       if (p) this.produto = p;
-    }
-
-    const designId = this.route.snapshot.queryParamMap.get('designId');
-    if (designId) {
-      const guardados = await this.storageService.get<any[]>('guardados') || [];
-      const design = guardados.find(item => item.id === designId);
-      if (design) {
-        this.atualizarImagem(design.imagem || null);
-        this.textoPersonalizacao = design.texto || '';
-        this.tamanhoTexto = design.tamanhoTexto || 24;
-        this.corTshirt = design.cor || '#ffffff';
-        if (design.produto) {
-          this.produto = design.produto;
-        }
-      }
     }
   }
 
@@ -67,68 +44,22 @@ export class PersonalizarPage implements OnInit {
     if (file) {
       const reader = new FileReader();
       reader.onload = (e: any) => {
-        this.atualizarImagem(e.target.result);
+        this.imagemEstampa = e.target.result;
       };
       reader.readAsDataURL(file);
     }
   }
 
-  async tirarFoto() {
-    try {
-      const image = await Camera.getPhoto({
-        quality: 90,
-        allowEditing: false,
-        resultType: CameraResultType.DataUrl,
-        source: CameraSource.Camera,
-      });
-
-      if (image.dataUrl) {
-        this.atualizarImagem(image.dataUrl);
-      } else {
-        const toast = await this.toastCtrl.create({
-          message: 'Não foi possível capturar a foto.',
-          duration: 2000,
-          color: 'warning'
-        });
-        toast.present();
-      }
-    } catch (error) {
-      console.error('Erro ao abrir câmera', error);
-      const toast = await this.toastCtrl.create({
-        message: 'Não foi possível abrir a câmera.',
-        duration: 2000,
-        color: 'warning'
-      });
-      toast.present();
-    }
-  }
-
-  async guardarPersonalizacao() {
-    const guardados = await this.storageService.get<any[]>('guardados') || [];
-
-    guardados.unshift({
-      id: Date.now().toString(),
-      imagem: this.imagemEstampa,
-      texto: this.textoPersonalizacao,
-      tamanhoTexto: this.tamanhoTexto,
-      cor: this.corTshirt,
-      produto: this.produto ? { ...this.produto } : null,
-      criadoEm: new Date().toISOString()
-    });
-
-    await this.storageService.set('guardados', guardados);
-
-    const toast = await this.toastCtrl.create({
-      message: 'Personalização guardada para usar depois!',
-      duration: 2000,
-      color: 'success'
-    });
-    toast.present();
-    this.router.navigate(['/guardados']);
+  private getCorLabel(hex: string): string {
+    const cores: Record<string, string> = {
+      '#ffffff': 'Branco',
+      '#1a1a1a': 'Preto',
+      '#b0b0b0': 'Cinza'
+    };
+    return cores[hex] || hex;
   }
 
   async salvar() {
-    const cart = await this.storageService.get<any[]>('carrinho') || [];
     const baseProduct = this.produto ? this.produto : {
       id: 'customizado',
       nome: 'T-shirt Personalizada',
@@ -137,16 +68,22 @@ export class PersonalizarPage implements OnInit {
       categoria: 'Exclusivo'
     };
 
+    const designNome = this.nomeDesign.trim() || baseProduct.nome;
+    const designId = `design_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
+
+    // Adiciona apenas ao carrinho
+    const cart = await this.storageService.get<any[]>('carrinho') || [];
     cart.push({
       produto: {
-        ...baseProduct,
-        imagem: this.imagemEstampa || baseProduct.imagem
+        id: designId,
+        nome: designNome,
+        preco: baseProduct.preco,
+        imagem: this.imagemEstampa || baseProduct.imagem,
+        categoria: 'Exclusivo'
       },
-      tamanho: 'L',
-      cor: this.corTshirt === '#ffffff' ? 'Branco' : this.corTshirt === '#1a1a1a' ? 'Preto' : 'Cinza',
-      quantidade: 1,
-      texto: this.textoPersonalizacao,
-      tamanhoTexto: this.tamanhoTexto
+      tamanho: this.tamanho,
+      cor: this.getCorLabel(this.corTshirt),
+      quantidade: 1
     });
     await this.storageService.set('carrinho', cart);
 
@@ -157,5 +94,44 @@ export class PersonalizarPage implements OnInit {
     });
     toast.present();
     this.router.navigate(['/carrinho']);
+  }
+
+  async guardarApenas() {
+    const baseProduct = this.produto ? this.produto : {
+      id: 'customizado',
+      nome: 'T-shirt Personalizada',
+      preco: 25.00,
+      imagem: this.imagemEstampa || 'assets/images/mockup_blank.png',
+      categoria: 'Exclusivo'
+    };
+
+    const designNome = this.nomeDesign.trim() || baseProduct.nome;
+    const designId = `design_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
+    const agora = new Date().toLocaleDateString('pt-PT', {
+      day: '2-digit', month: '2-digit', year: 'numeric'
+    });
+
+    const designs = await this.storageService.get<Design[]>('meus_designs') || [];
+    const novoDesign: Design = {
+      id: designId,
+      nome: designNome,
+      cor: this.corTshirt,
+      imagemEstampa: this.imagemEstampa,
+      produtoBase: baseProduct.nome,
+      tamanho: this.tamanho,
+      preco: baseProduct.preco,
+      dataCriacao: agora,
+      encomendado: false
+    };
+    designs.unshift(novoDesign);
+    await this.storageService.set('meus_designs', designs);
+
+    const toast = await this.toastCtrl.create({
+      message: 'Design guardado em "Meus Designs"!',
+      duration: 2500,
+      color: 'success'
+    });
+    toast.present();
+    this.router.navigate(['/meus-designs']);
   }
 }
