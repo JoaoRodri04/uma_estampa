@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 import { ProductService, Produto } from '../services/product.service';
+import { Design } from '../meus-designs/meus-designs.page';
 
 @Component({
   selector: 'app-personalizar',
@@ -18,9 +19,9 @@ import { ProductService, Produto } from '../services/product.service';
 export class PersonalizarPage implements OnInit {
   public corTshirt: string = '#ffffff';
   public imagemEstampa: string | null = null;
-  public textoPersonalizacao: string = '';
-  public tamanhoTexto: number = 24;
   public produto: Produto | null = null;
+  public nomeDesign: string = '';
+  public tamanho: string = 'L';
 
   constructor(
     private storageService: AppStorageService,
@@ -49,8 +50,16 @@ export class PersonalizarPage implements OnInit {
     }
   }
 
+  private getCorLabel(hex: string): string {
+    const cores: Record<string, string> = {
+      '#ffffff': 'Branco',
+      '#1a1a1a': 'Preto',
+      '#b0b0b0': 'Cinza'
+    };
+    return cores[hex] || hex;
+  }
+
   async salvar() {
-    const cart = await this.storageService.get<any[]>('carrinho') || [];
     const baseProduct = this.produto ? this.produto : {
       id: 'customizado',
       nome: 'T-shirt Personalizada',
@@ -59,16 +68,22 @@ export class PersonalizarPage implements OnInit {
       categoria: 'Exclusivo'
     };
 
+    const designNome = this.nomeDesign.trim() || baseProduct.nome;
+    const designId = `design_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
+
+    // Adiciona apenas ao carrinho
+    const cart = await this.storageService.get<any[]>('carrinho') || [];
     cart.push({
       produto: {
-        ...baseProduct,
-        imagem: this.imagemEstampa || baseProduct.imagem
+        id: designId,
+        nome: designNome,
+        preco: baseProduct.preco,
+        imagem: this.imagemEstampa || baseProduct.imagem,
+        categoria: 'Exclusivo'
       },
-      tamanho: 'L',
-      cor: this.corTshirt === '#ffffff' ? 'Branco' : this.corTshirt === '#1a1a1a' ? 'Preto' : 'Cinza',
-      quantidade: 1,
-      texto: this.textoPersonalizacao,
-      tamanhoTexto: this.tamanhoTexto
+      tamanho: this.tamanho,
+      cor: this.getCorLabel(this.corTshirt),
+      quantidade: 1
     });
     await this.storageService.set('carrinho', cart);
 
@@ -79,5 +94,44 @@ export class PersonalizarPage implements OnInit {
     });
     toast.present();
     this.router.navigate(['/carrinho']);
+  }
+
+  async guardarApenas() {
+    const baseProduct = this.produto ? this.produto : {
+      id: 'customizado',
+      nome: 'T-shirt Personalizada',
+      preco: 25.00,
+      imagem: this.imagemEstampa || 'assets/images/mockup_blank.png',
+      categoria: 'Exclusivo'
+    };
+
+    const designNome = this.nomeDesign.trim() || baseProduct.nome;
+    const designId = `design_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
+    const agora = new Date().toLocaleDateString('pt-PT', {
+      day: '2-digit', month: '2-digit', year: 'numeric'
+    });
+
+    const designs = await this.storageService.get<Design[]>('meus_designs') || [];
+    const novoDesign: Design = {
+      id: designId,
+      nome: designNome,
+      cor: this.corTshirt,
+      imagemEstampa: this.imagemEstampa,
+      produtoBase: baseProduct.nome,
+      tamanho: this.tamanho,
+      preco: baseProduct.preco,
+      dataCriacao: agora,
+      encomendado: false
+    };
+    designs.unshift(novoDesign);
+    await this.storageService.set('meus_designs', designs);
+
+    const toast = await this.toastCtrl.create({
+      message: 'Design guardado em "Meus Designs"!',
+      duration: 2500,
+      color: 'success'
+    });
+    toast.present();
+    this.router.navigate(['/meus-designs']);
   }
 }

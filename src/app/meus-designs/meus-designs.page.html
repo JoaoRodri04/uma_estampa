@@ -1,0 +1,114 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Meus Designs</ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Voltar</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <!-- Estado vazio -->
+  <div *ngIf="designs.length === 0" class="empty-state ion-text-center ion-padding">
+    <div class="empty-icon-wrapper">
+      <ion-icon name="color-wand-outline"></ion-icon>
+    </div>
+    <h2>Nenhum design ainda</h2>
+    <p>Cria o teu primeiro design personalizado e ele aparecerá aqui.</p>
+    <ion-button color="primary" routerLink="/personalizar" class="ion-margin-top">
+      <ion-icon slot="start" name="add-circle-outline"></ion-icon>
+      Criar Novo Design
+    </ion-button>
+  </div>
+
+  <!-- Lista de designs -->
+  <div *ngIf="designs.length > 0" class="designs-list">
+
+    <!-- Contador -->
+    <div class="designs-header">
+      <span class="designs-count">{{ designs.length }} design{{ designs.length !== 1 ? 's' : '' }}</span>
+      <ion-button fill="clear" size="small" routerLink="/personalizar">
+        <ion-icon slot="start" name="add-circle-outline"></ion-icon>
+        Novo
+      </ion-button>
+    </div>
+
+    <div class="design-card" *ngFor="let design of designs; trackBy: trackById">
+
+      <!-- Badge de encomendado -->
+      <div *ngIf="design.encomendado" class="ordered-badge">
+        <ion-icon name="checkmark-circle"></ion-icon>
+        Encomendado
+      </div>
+
+      <div class="card-body">
+        <!-- Preview do design -->
+        <div class="design-preview" [style.background-color]="design.cor">
+          <img
+            *ngIf="design.imagemEstampa"
+            [src]="design.imagemEstampa"
+            class="estampa-img"
+            alt="Estampa"
+          />
+          <div *ngIf="!design.imagemEstampa" class="no-image">
+            <ion-icon name="shirt-outline"></ion-icon>
+          </div>
+        </div>
+
+        <!-- Info -->
+        <div class="design-info">
+          <h3 class="design-name">{{ design.nome }}</h3>
+          <p class="design-meta">
+            <ion-icon name="shirt-outline"></ion-icon>
+            {{ design.produtoBase }}
+          </p>
+          <p class="design-meta">
+            <ion-icon name="resize-outline"></ion-icon>
+            Tamanho {{ design.tamanho }}
+          </p>
+          <p class="design-meta">
+            <ion-icon name="color-palette-outline"></ion-icon>
+            {{ getCorLabel(design.cor) }}
+          </p>
+          <p class="design-date">
+            <ion-icon name="calendar-outline"></ion-icon>
+            {{ design.dataCriacao }}
+          </p>
+          <p class="design-price">{{ design.preco | currency:'EUR':'symbol':'1.2-2' }}</p>
+        </div>
+      </div>
+
+      <!-- Ações -->
+      <div class="card-actions">
+        <ion-button
+          fill="outline"
+          color="danger"
+          size="small"
+          (click)="confirmarEliminar(design)"
+        >
+          <ion-icon slot="start" name="trash-outline"></ion-icon>
+          Eliminar
+        </ion-button>
+
+        <ion-button
+          fill="solid"
+          color="primary"
+          size="small"
+          (click)="adicionarAoCarrinho(design)"
+        >
+          <ion-icon slot="start" name="cart-outline"></ion-icon>
+          Carrinho
+        </ion-button>
+      </div>
+
+    </div>
+  </div>
+
+</ion-content>

@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/carrinho"></ion-back-button>
     </ion-buttons>
-    <ion-title>Checkout</ion-title>
+    <ion-title>Finalizar Compra</ion-title>
   </ion-toolbar>
   <ion-toolbar>
     <ion-buttons slot="start">
@@ -13,31 +13,174 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content>
   <form (ngSubmit)="concluirPedido()">
-    <ion-list lines="inset">
-      <ion-list-header><h5>Dados de Entrega</h5></ion-list-header>
-      <ion-item>
-        <ion-input label="Nome" labelPlacement="floating" type="text" [(ngModel)]="dados.nome" name="nome" required></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-input label="Morada" labelPlacement="floating" type="text" [(ngModel)]="dados.morada" name="morada" required></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-input label="Código Postal" labelPlacement="floating" type="text" [(ngModel)]="dados.cp" name="cp" required></ion-input>
-      </ion-item>
-    </ion-list>
 
-    <ion-list lines="none" class="ion-margin-top">
-      <ion-list-header><h5>Pagamento</h5></ion-list-header>
+    <!-- ── Resumo da Encomenda ─────────────────────────────── -->
+    <div class="section-card">
+      <h2 class="section-title">
+        <ion-icon name="receipt-outline"></ion-icon>
+        Resumo da Encomenda
+      </h2>
+
+      <div class="order-item" *ngFor="let item of itens">
+        <img [src]="item.produto.imagem" class="item-thumb" alt="{{ item.produto.nome }}" />
+        <div class="item-info">
+          <p class="item-name">{{ item.produto.nome }}</p>
+          <p class="item-meta">Tam. {{ item.tamanho }} · {{ item.cor }}</p>
+          <p class="item-meta" *ngIf="item.quantidade > 1">Qty: {{ item.quantidade }}</p>
+        </div>
+        <p class="item-price">{{ item.produto.preco * item.quantidade | currency:'EUR':'symbol':'1.2-2' }}</p>
+      </div>
+
+      <div class="empty-order" *ngIf="itens.length === 0">
+        <ion-icon name="basket-outline"></ion-icon>
+        <p>Sem artigos no carrinho</p>
+      </div>
+
+      <div class="totals">
+        <div class="total-row">
+          <span>Subtotal</span>
+          <span>{{ subtotal | currency:'EUR':'symbol':'1.2-2' }}</span>
+        </div>
+        <div class="total-row">
+          <span>Envio</span>
+          <span class="shipping">{{ itens.length > 0 ? (taxaEntrega | currency:'EUR':'symbol':'1.2-2') : '—' }}</span>
+        </div>
+        <div class="total-row total-final">
+          <span>Total</span>
+          <span>{{ precoTotal | currency:'EUR':'symbol':'1.2-2' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Dados de Entrega ───────────────────────────────── -->
+    <div class="section-card">
+      <h2 class="section-title">
+        <ion-icon name="location-outline"></ion-icon>
+        Dados de Entrega
+      </h2>
+
+      <div class="input-group">
+        <ion-input
+          label="Nome completo"
+          labelPlacement="floating"
+          type="text"
+          [(ngModel)]="dados.nome"
+          name="nome"
+          required
+          autocomplete="name"
+        ></ion-input>
+      </div>
+      <div class="input-group">
+        <ion-input
+          label="Morada"
+          labelPlacement="floating"
+          type="text"
+          [(ngModel)]="dados.morada"
+          name="morada"
+          required
+          autocomplete="street-address"
+        ></ion-input>
+      </div>
+      <div class="input-group">
+        <ion-input
+          label="Código Postal"
+          labelPlacement="floating"
+          type="text"
+          [(ngModel)]="dados.cp"
+          name="cp"
+          required
+          placeholder="0000-000"
+          autocomplete="postal-code"
+        ></ion-input>
+      </div>
+    </div>
+
+    <!-- ── Contacto ──────────────────────────────────────── -->
+    <div class="section-card">
+      <h2 class="section-title">
+        <ion-icon name="call-outline"></ion-icon>
+        Contacto
+      </h2>
+      <p class="section-hint">Preenche pelo menos um dos campos abaixo para receberes a confirmação.</p>
+
+      <div class="input-group">
+        <ion-input
+          label="Nº de Telemóvel"
+          labelPlacement="floating"
+          type="tel"
+          [(ngModel)]="dados.telemovel"
+          name="telemovel"
+          placeholder="9XX XXX XXX"
+          autocomplete="tel"
+        ></ion-input>
+      </div>
+      <div class="input-group">
+        <ion-input
+          label="Email"
+          labelPlacement="floating"
+          type="email"
+          [(ngModel)]="dados.email"
+          name="email"
+          placeholder="exemplo@email.com"
+          autocomplete="email"
+        ></ion-input>
+      </div>
+
+      <p class="contact-warning" *ngIf="!contactoValido">
+        <ion-icon name="alert-circle-outline"></ion-icon>
+        Introduz um telemóvel ou email para continuar.
+      </p>
+    </div>
+
+    <!-- ── Pagamento ─────────────────────────────────────── -->
+    <div class="section-card">
+      <h2 class="section-title">
+        <ion-icon name="card-outline"></ion-icon>
+        Método de Pagamento
+      </h2>
+
       <ion-radio-group [(ngModel)]="pagamento" name="pagamento">
-        <ion-item><ion-radio value="mbway">MB WAY</ion-radio></ion-item>
-        <ion-item><ion-radio value="multibanco">Multibanco</ion-radio></ion-item>
+        <div class="payment-option">
+          <ion-radio value="mbway" justify="space-between">
+            <div class="payment-label">
+              <ion-icon name="phone-portrait-outline"></ion-icon>
+              MB WAY
+            </div>
+          </ion-radio>
+        </div>
+        <div class="payment-option">
+          <ion-radio value="multibanco" justify="space-between">
+            <div class="payment-label">
+              <ion-icon name="business-outline"></ion-icon>
+              Multibanco
+            </div>
+          </ion-radio>
+        </div>
+        <div class="payment-option">
+          <ion-radio value="cartao" justify="space-between">
+            <div class="payment-label">
+              <ion-icon name="card-outline"></ion-icon>
+              Cartão de Crédito / Débito
+            </div>
+          </ion-radio>
+        </div>
       </ion-radio-group>
-    </ion-list>
+    </div>
 
-    <ion-button expand="block" color="success" type="submit" class="ion-margin-top">
-      Finalizar Encomenda
-    </ion-button>
+    <!-- ── Botão final ───────────────────────────────────── -->
+    <div class="submit-area">
+      <ion-button
+        expand="block"
+        color="success"
+        type="submit"
+        [disabled]="!dados.nome || !dados.morada || !dados.cp || !contactoValido || itens.length === 0"
+      >
+        <ion-icon slot="start" name="checkmark-circle-outline"></ion-icon>
+        Confirmar Encomenda · {{ precoTotal | currency:'EUR':'symbol':'1.2-2' }}
+      </ion-button>
+    </div>
+
   </form>
 </ion-content>
