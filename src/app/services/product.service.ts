@@ -16,49 +16,49 @@ export class ProductService {
       nome: 'Camiseta Branca',
       preco: 39.90,
       categoria: 'Vestuário',
-      imagem: 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=900&q=80'
+      imagem: 'https://images.unsplash.com/photo-1651761179569-4ba2aa054997?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fHRzaGlydHxlbnwwfHwwfHx8MA%3D%3D'
     },
     {
       id: '2',
       nome: 'Boné Clássico',
       preco: 29.90,
       categoria: 'Acessórios',
-      imagem: 'https://images.unsplash.com/photo-1520975601212-0c53b69b96a5?auto=format&fit=crop&w=900&q=80'
+      imagem: 'https://media.istockphoto.com/id/2220907733/pt/foto/isolated-plain-white-baseball-cap.webp?a=1&b=1&s=612x612&w=0&k=20&c=VFC00dVXfW1PI5i7yqi3iOmOJ8a_XwA60Ia0phYiSdk='
     },
     {
       id: '3',
       nome: 'Mug Personalizado',
       preco: 24.90,
       categoria: 'Casa',
-      imagem: 'https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?auto=format&fit=crop&w=900&q=80'
+      imagem: 'https://images.unsplash.com/photo-1650959858546-d09833d5317b?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fG11Z3xlbnwwfHwwfHx8MA%3D%3D'
     },
     {
       id: '4',
       nome: 'Regata Vintage',
       preco: 34.90,
       categoria: 'Vestuário',
-      imagem: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=80'
+      imagem: 'https://media.istockphoto.com/id/964763004/pt/foto/isolated-woman-black-vest.webp?a=1&b=1&s=612x612&w=0&k=20&c=wCO741SUWjDZRhv3A-nSTVF0KfZlGEGb2o9vwqZ0Psg='
     },
     {
       id: '5',
-      nome: 'Moletom com Capuz',
+      nome: 'Sweat',
       preco: 59.90,
       categoria: 'Vestuário',
-      imagem: 'https://images.unsplash.com/photo-1556821552-5f4c2f3a1c3a?auto=format&fit=crop&w=900&q=80'
+      imagem: 'https://media.istockphoto.com/id/1456814310/pt/foto/white-hoodie-back-mockup-on-light-wood-background.webp?a=1&b=1&s=612x612&w=0&k=20&c=LC5zoxFBGS56IaB7qq-rP_Ah6B21Vn0CFd_JDVKydbQ='
     },
     {
       id: '6',
       nome: 'Saco de Pano',
       preco: 19.90,
       categoria: 'Acessórios',
-      imagem: 'https://images.unsplash.com/photo-1544441894-5e9d8b5b5c1a?auto=format&fit=crop&w=900&q=80'
+      imagem: 'https://plus.unsplash.com/premium_photo-1681324227573-953664cf9b32?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8c2FjbyUyMHBhbm98ZW58MHx8MHx8fDA%3D'
     },
     {
       id: '7',
       nome: 'Almofada Personalizada',
       preco: 44.90,
       categoria: 'Casa',
-      imagem: 'https://images.unsplash.com/photo-1491684221066-81342ee5ff30?auto=format&fit=crop&w=900&q=80'
+      imagem: 'https://images.unsplash.com/photo-1691256676366-370303d55b61?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8YWxtb2ZhZGF8ZW58MHx8MHx8fDA%3D'
     },
     {
       id: '8',
@@ -69,17 +69,10 @@ export class ProductService {
     },
     {
       id: '9',
-      nome: 'Camiseta Gráfica',
-      preco: 42.90,
-      categoria: 'Vestuário',
-      imagem: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=900&q=80'
-    },
-    {
-      id: '10',
       nome: 'Garrafas de Água',
       preco: 29.90,
       categoria: 'Casa',
-      imagem: 'https://images.unsplash.com/photo-1602143407151-7e36dd0193d7?auto=format&fit=crop&w=900&q=80'
+      imagem: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Z2FycmFmYXxlbnwwfHwwfHx8MA%3D%3D'
     }
   ];
 
