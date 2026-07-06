@@ -22,7 +22,7 @@
       <ion-card-content>
         <h2>{{ usuarioLogado.nome }}</h2>
         <p>{{ usuarioLogado.email }}</p>
-        
+
         <ion-button expand="block" color="danger" (click)="logout()" class="logout-btn">
           <ion-icon name="log-out" slot="start"></ion-icon>
           Sair da Conta
@@ -35,14 +35,14 @@
   <div *ngIf="!usuarioAutenticado" class="auth-section">
     <!-- Toggle entre Login e Registro -->
     <div class="modo-toggle">
-      <button 
-        [class.ativo]="modoLogin" 
+      <button
+        [class.ativo]="modoLogin"
         (click)="trocarModo(true)"
         class="toggle-btn">
         Entrar
       </button>
-      <button 
-        [class.ativo]="!modoLogin" 
+      <button
+        [class.ativo]="!modoLogin"
         (click)="trocarModo(false)"
         class="toggle-btn">
         Registar
@@ -56,8 +56,8 @@
 
       <ion-item class="input-item">
         <ion-label position="floating">Email</ion-label>
-        <ion-input 
-          type="email" 
+        <ion-input
+          type="email"
           formControlName="email"
           placeholder="seu@email.com">
         </ion-input>
@@ -68,14 +68,14 @@
 
       <ion-item class="input-item">
         <ion-label position="floating">Palavra-passe</ion-label>
-        <ion-input 
-          [type]="mostrarSenhaLogin ? 'text' : 'password'" 
+        <ion-input
+          [type]="mostrarSenhaLogin ? 'text' : 'password'"
           formControlName="senha"
           placeholder="••••••••">
         </ion-input>
-        <ion-button 
-          fill="clear" 
-          slot="end" 
+        <ion-button
+          fill="clear"
+          slot="end"
           (click)="mostrarSenhaLogin = !mostrarSenhaLogin">
           <ion-icon [name]="mostrarSenhaLogin ? 'eye-off' : 'eye'"></ion-icon>
         </ion-button>
@@ -84,9 +84,9 @@
         <p class="error-msg">Palavra-passe obrigatória</p>
       </ion-text>
 
-      <ion-button 
-        expand="block" 
-        type="submit" 
+      <ion-button
+        expand="block"
+        type="submit"
         [disabled]="loginForm.invalid"
         class="submit-btn">
         <ion-icon name="log-in" slot="start"></ion-icon>
@@ -105,8 +105,8 @@
 
       <ion-item class="input-item">
         <ion-label position="floating">Nome Completo</ion-label>
-        <ion-input 
-          type="text" 
+        <ion-input
+          type="text"
           formControlName="nome"
           placeholder="Seu nome completo">
         </ion-input>
@@ -117,8 +117,8 @@
 
       <ion-item class="input-item">
         <ion-label position="floating">Email</ion-label>
-        <ion-input 
-          type="email" 
+        <ion-input
+          type="email"
           formControlName="email"
           placeholder="seu@email.com">
         </ion-input>
@@ -129,14 +129,14 @@
 
       <ion-item class="input-item">
         <ion-label position="floating">Palavra-passe</ion-label>
-        <ion-input 
-          [type]="mostrarSenhaRegistro ? 'text' : 'password'" 
+        <ion-input
+          [type]="mostrarSenhaRegistro ? 'text' : 'password'"
           formControlName="senha"
           placeholder="••••••••">
         </ion-input>
-        <ion-button 
-          fill="clear" 
-          slot="end" 
+        <ion-button
+          fill="clear"
+          slot="end"
           (click)="mostrarSenhaRegistro = !mostrarSenhaRegistro">
           <ion-icon [name]="mostrarSenhaRegistro ? 'eye-off' : 'eye'"></ion-icon>
         </ion-button>
@@ -147,8 +147,8 @@
 
       <ion-item class="input-item">
         <ion-label position="floating">Confirmar Palavra-passe</ion-label>
-        <ion-input 
-          [type]="mostrarSenhaRegistro ? 'text' : 'password'" 
+        <ion-input
+          [type]="mostrarSenhaRegistro ? 'text' : 'password'"
           formControlName="confirmarSenha"
           placeholder="••••••••">
         </ion-input>
@@ -161,9 +161,9 @@
         <p class="error-msg">As palavras-passe não correspondem</p>
       </ion-text>
 
-      <ion-button 
-        expand="block" 
-        type="submit" 
+      <ion-button
+        expand="block"
+        type="submit"
         [disabled]="registroForm.invalid || senhasNaoCorrespondem"
         class="submit-btn">
         <ion-icon name="person-add" slot="start"></ion-icon>
