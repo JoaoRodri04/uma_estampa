@@ -36,10 +36,6 @@ const routes: Routes = [
     loadChildren: () => import('./personalizar/personalizar.module').then( m => m.PersonalizarPageModule)
   },
   {
-    path: 'guardados',
-    loadChildren: () => import('./guardados/guardados.module').then( m => m.GuardadosPageModule)
-  },
-  {
     path: 'sobre',
     loadChildren: () => import('./sobre/sobre.module').then( m => m.SobrePageModule)
   },
