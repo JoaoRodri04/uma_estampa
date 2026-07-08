@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
@@ -17,11 +17,18 @@ import { Design } from '../meus-designs/meus-designs.page';
   styleUrls: ['./personalizar.page.scss'],
 })
 export class PersonalizarPage implements OnInit {
-  public corTshirt: string = '#ffffff';
+  @ViewChild('previewCanvas', { static: false }) previewCanvas!: ElementRef<HTMLCanvasElement>;
+
+  public corTshirt = '#ffffff';
   public imagemEstampa: string | null = null;
+  public imagemOriginal: string | null = null;
   public produto: Produto | null = null;
-  public nomeDesign: string = '';
-  public tamanho: string = 'L';
+  public nomeDesign = '';
+  public tamanho = 'L';
+  public escala = 1;
+  public posX = 0;
+  public posY = 0;
+  public tamanhoPreview = 220;
 
   constructor(
     private storageService: AppStorageService,
@@ -44,9 +51,99 @@ export class PersonalizarPage implements OnInit {
     if (file) {
       const reader = new FileReader();
       reader.onload = (e: any) => {
+        this.imagemOriginal = e.target.result;
         this.imagemEstampa = e.target.result;
+        this.escala = 1;
+        this.posX = 0;
+        this.posY = 0;
+        this.renderPreview();
       };
       reader.readAsDataURL(file);
+    }
+  }
+
+  private loadImage(src: string): Promise<HTMLImageElement> {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = () => reject(new Error('Erro ao carregar imagem'));
+      img.src = src;
+    });
+  }
+
+  async renderPreview() {
+    const canvas = this.previewCanvas?.nativeElement;
+    if (!canvas || !this.imagemOriginal) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    try {
+      const img = await this.loadImage(this.imagemOriginal);
+      const size = this.tamanhoPreview;
+      canvas.width = size;
+      canvas.height = size;
+
+      ctx.clearRect(0, 0, size, size);
+      ctx.fillStyle = '#f8fafc';
+      ctx.fillRect(0, 0, size, size);
+
+      const aspect = img.naturalWidth / img.naturalHeight;
+      let drawWidth = img.naturalWidth * this.escala;
+      let drawHeight = drawWidth / aspect;
+      if (drawHeight < img.naturalHeight * this.escala) {
+        drawHeight = img.naturalHeight * this.escala;
+        drawWidth = drawHeight * aspect;
+      }
+
+      const offsetX = ((size - drawWidth) / 2) + (this.posX / 100) * (size - drawWidth);
+      const offsetY = ((size - drawHeight) / 2) + (this.posY / 100) * (size - drawHeight);
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(0, 0, size, size);
+      ctx.clip();
+      ctx.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight, offsetX, offsetY, drawWidth, drawHeight);
+      ctx.restore();
+    } catch (error) {
+      console.error('Erro ao renderizar a pré-visualização', error);
+    }
+  }
+
+  async aplicarEdicao() {
+    if (!this.imagemOriginal) return;
+
+    const canvas = document.createElement('canvas');
+    const outputSize = 1000;
+    canvas.width = outputSize;
+    canvas.height = outputSize;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    try {
+      const img = await this.loadImage(this.imagemOriginal);
+      const aspect = img.naturalWidth / img.naturalHeight;
+      let drawWidth = img.naturalWidth * this.escala;
+      let drawHeight = drawWidth / aspect;
+      if (drawHeight < img.naturalHeight * this.escala) {
+        drawHeight = img.naturalHeight * this.escala;
+        drawWidth = drawHeight * aspect;
+      }
+
+      const offsetX = ((outputSize - drawWidth) / 2) + (this.posX / 100) * (outputSize - drawWidth);
+      const offsetY = ((outputSize - drawHeight) / 2) + (this.posY / 100) * (outputSize - drawHeight);
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(0, 0, outputSize, outputSize);
+      ctx.clip();
+      ctx.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight, offsetX, offsetY, drawWidth, drawHeight);
+      ctx.restore();
+
+      this.imagemEstampa = canvas.toDataURL('image/png');
+      await this.renderPreview();
+    } catch (error) {
+      console.error('Erro ao aplicar a edição da imagem', error);
     }
   }
 
@@ -71,7 +168,6 @@ export class PersonalizarPage implements OnInit {
     const designNome = this.nomeDesign.trim() || baseProduct.nome;
     const designId = `design_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
 
-    // Adiciona apenas ao carrinho
     const cart = await this.storageService.get<any[]>('carrinho') || [];
     cart.push({
       produto: {

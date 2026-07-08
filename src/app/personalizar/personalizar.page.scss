@@ -6,74 +6,58 @@ div[style*="text-align: center"] {
   margin: 24px 0;
 }
 
-.mockup-preview {
-  background: #ffffff;
-  padding: 24px;
+.preview-box {
+  width: 240px;
+  margin: 0 auto;
+  padding: 16px;
   border-radius: 20px;
+  background: #ffffff;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   border: 1px solid #e2e8f0;
-
-  > div {
-    background: #ffffff !important;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-  }
-}
-
-.preview-box {
-  width: 200px;
-  height: 200px;
-  margin: 0 auto;
-  position: relative;
-  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  overflow: hidden;
-}
-
-.preview-base {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  position: absolute;
-}
-
-.preview-overlay {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  z-index: 10;
+  gap: 12px;
 }
 
 .preview-image-wrapper {
-  position: absolute;
-  top: 30%;
-  left: 25%;
-  width: 50%;
-  height: 40%;
+  width: 220px;
+  height: 220px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.preview-image {
+.preview-image-wrapper canvas {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  display: block;
 }
 
-.preview-text {
-  color: #000;
-  font-weight: bold;
+.preview-placeholder {
+  color: #64748b;
+  font-size: 14px;
   text-align: center;
-  padding: 10px;
-  max-width: 150px;
-  word-wrap: break-word;
-  z-index: 20;
+  padding: 16px;
+}
+
+.editor-panel {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 12px;
+}
+
+.editor-title {
+  display: block;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 8px;
 }
 
 ion-list {
@@ -122,7 +106,6 @@ ion-item {
 input[type="file"] {
   color: #64748b;
 }
-
 
 input[type="file"]::file-selector-button {
   background: #6366f1;

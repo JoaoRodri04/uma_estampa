@@ -1,0 +1,67 @@
+.splash-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
+  animation: splashFade 1.6s ease forwards;
+}
+
+.splash-card {
+  text-align: center;
+  color: #ffffff;
+  animation: splashPop 0.8s ease both;
+}
+
+.splash-logo {
+  width: 96px;
+  height: 96px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.95);
+  color: #6366f1;
+  font-size: 2rem;
+  font-weight: 800;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.25);
+}
+
+.splash-card h1 {
+  margin: 0 0 8px;
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.splash-card p {
+  margin: 0;
+  font-size: 0.95rem;
+  opacity: 0.95;
+}
+
+@keyframes splashPop {
+  0% {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes splashFade {
+  0% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
