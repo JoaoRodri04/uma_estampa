@@ -8,6 +8,7 @@ import { ToastController } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 import { ProductService, Produto } from '../services/product.service';
 import { Design } from '../meus-designs/meus-designs.page';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 
 @Component({
   selector: 'app-personalizar',
@@ -55,15 +56,46 @@ export class PersonalizarPage implements OnInit {
     if (file) {
       const reader = new FileReader();
       reader.onload = (e: any) => {
-        this.imagemOriginal = e.target.result;
-        this.imagemEstampa = e.target.result;
-        this.escala = 1;
-        this.posX = 0;
-        this.posY = 0;
-        this.renderPreview();
+        this.usarImagem(e.target.result);
       };
       reader.readAsDataURL(file);
     }
+  }
+
+  async tirarFoto() {
+    try {
+      const image = await Camera.getPhoto({
+        quality: 90,
+        allowEditing: false,
+        resultType: CameraResultType.Base64,
+        source: CameraSource.Camera,
+        saveToGallery: false
+      });
+
+      if (image.base64String) {
+        const dataUrl = `data:image/${image.format ?? 'jpeg'};base64,${image.base64String}`;
+        this.usarImagem(dataUrl);
+      } else if (image.webPath) {
+        this.usarImagem(image.webPath);
+      }
+    } catch (error) {
+      console.error('Erro ao tirar a foto', error);
+      const toast = await this.toastCtrl.create({
+        message: 'Não foi possível abrir a câmera neste momento.',
+        duration: 2000,
+        color: 'danger'
+      });
+      await toast.present();
+    }
+  }
+
+  private usarImagem(source: string) {
+    this.imagemOriginal = source;
+    this.imagemEstampa = source;
+    this.escala = 1;
+    this.posX = 0;
+    this.posY = 0;
+    void this.renderPreview();
   }
 
   private loadImage(src: string): Promise<HTMLImageElement> {

@@ -77,6 +77,11 @@
     <!-- Upload imagem -->
     <ion-item class="ion-margin-top">
       <div style="width: 100%;">
+        <ion-button expand="block" color="secondary" class="ion-margin-bottom" (click)="tirarFoto()">
+          <ion-icon slot="start" name="camera-outline"></ion-icon>
+          Tirar Foto
+        </ion-button>
+
         <label style="display: block; text-align: center; padding: 24px; background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 12px; cursor: pointer; transition: all 0.3s;">
           <ion-icon name="cloud-upload" style="font-size: 32px; color: #6366f1; display: block; margin-bottom: 8px;"></ion-icon>
           <span style="color: #0f172a; font-weight: 600; display: block;">Escolher Imagem</span>
