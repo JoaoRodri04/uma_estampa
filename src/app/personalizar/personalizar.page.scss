@@ -53,6 +53,11 @@ div[style*="text-align: center"] {
   padding: 12px;
 }
 
+.editor-panel ion-input,
+.editor-panel ion-select {
+  --padding-start: 0;
+}
+
 .editor-title {
   display: block;
   font-weight: 700;

@@ -112,6 +112,41 @@
         Aplicar recorte
       </ion-button>
     </div>
+
+    <div class="editor-panel ion-margin-top">
+      <ion-label class="editor-title">Adicionar texto</ion-label>
+
+      <ion-item lines="none">
+        <ion-input
+          label="Texto"
+          labelPlacement="floating"
+          [(ngModel)]="textoPersonalizado"
+          placeholder="Ex: Feliz Natal"
+          (ionInput)="renderPreview()"
+        ></ion-input>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label position="stacked">Tamanho do texto</ion-label>
+        <ion-range min="20" max="120" step="1" [(ngModel)]="tamanhoTexto" (ionChange)="renderPreview()"></ion-range>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label>Cor do texto</ion-label>
+        <ion-select [(ngModel)]="corTexto" (ionChange)="renderPreview()">
+          <ion-select-option value="#ffffff">Branco</ion-select-option>
+          <ion-select-option value="#000000">Preto</ion-select-option>
+          <ion-select-option value="#6366f1">Roxo</ion-select-option>
+          <ion-select-option value="#ec4899">Rosa</ion-select-option>
+          <ion-select-option value="#ef4444">Vermelho</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label position="stacked">Posição vertical</ion-label>
+        <ion-range min="0" max="100" step="1" [(ngModel)]="posTextoY" (ionChange)="renderPreview()"></ion-range>
+      </ion-item>
+    </div>
   </ion-list>
 
   <!-- Botões de ação -->

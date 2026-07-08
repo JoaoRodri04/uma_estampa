@@ -29,6 +29,10 @@ export class PersonalizarPage implements OnInit {
   public posX = 0;
   public posY = 0;
   public tamanhoPreview = 220;
+  public textoPersonalizado = '';
+  public tamanhoTexto = 48;
+  public corTexto = '#ffffff';
+  public posTextoY = 70;
 
   constructor(
     private storageService: AppStorageService,
@@ -71,6 +75,26 @@ export class PersonalizarPage implements OnInit {
     });
   }
 
+  private calcularLayout(img: HTMLImageElement, viewportSize: number) {
+    const aspect = img.naturalWidth / img.naturalHeight;
+    const baseScale = Math.min(viewportSize / img.naturalWidth, viewportSize / img.naturalHeight);
+    const scale = baseScale * this.escala;
+
+    let drawWidth = img.naturalWidth * scale;
+    let drawHeight = drawWidth / aspect;
+    if (drawHeight < img.naturalHeight * scale) {
+      drawHeight = img.naturalHeight * scale;
+      drawWidth = drawHeight * aspect;
+    }
+
+    const maxOffsetX = Math.max(drawWidth - viewportSize, 0);
+    const maxOffsetY = Math.max(drawHeight - viewportSize, 0);
+    const offsetX = ((viewportSize - drawWidth) / 2) + (this.posX / 100) * maxOffsetX;
+    const offsetY = ((viewportSize - drawHeight) / 2) + (this.posY / 100) * maxOffsetY;
+
+    return { drawWidth, drawHeight, offsetX, offsetY };
+  }
+
   async renderPreview() {
     const canvas = this.previewCanvas?.nativeElement;
     if (!canvas || !this.imagemOriginal) return;
@@ -88,16 +112,7 @@ export class PersonalizarPage implements OnInit {
       ctx.fillStyle = '#f8fafc';
       ctx.fillRect(0, 0, size, size);
 
-      const aspect = img.naturalWidth / img.naturalHeight;
-      let drawWidth = img.naturalWidth * this.escala;
-      let drawHeight = drawWidth / aspect;
-      if (drawHeight < img.naturalHeight * this.escala) {
-        drawHeight = img.naturalHeight * this.escala;
-        drawWidth = drawHeight * aspect;
-      }
-
-      const offsetX = ((size - drawWidth) / 2) + (this.posX / 100) * (size - drawWidth);
-      const offsetY = ((size - drawHeight) / 2) + (this.posY / 100) * (size - drawHeight);
+      const { drawWidth, drawHeight, offsetX, offsetY } = this.calcularLayout(img, size);
 
       ctx.save();
       ctx.beginPath();
@@ -105,6 +120,16 @@ export class PersonalizarPage implements OnInit {
       ctx.clip();
       ctx.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight, offsetX, offsetY, drawWidth, drawHeight);
       ctx.restore();
+
+      if (this.textoPersonalizado.trim()) {
+        const fontSize = Math.max(20, this.tamanhoTexto);
+        ctx.font = `bold ${fontSize}px Arial`;
+        ctx.fillStyle = this.corTexto;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        const textY = (this.posTextoY / 100) * size;
+        ctx.fillText(this.textoPersonalizado, size / 2, textY);
+      }
     } catch (error) {
       console.error('Erro ao renderizar a pré-visualização', error);
     }
@@ -122,16 +147,7 @@ export class PersonalizarPage implements OnInit {
 
     try {
       const img = await this.loadImage(this.imagemOriginal);
-      const aspect = img.naturalWidth / img.naturalHeight;
-      let drawWidth = img.naturalWidth * this.escala;
-      let drawHeight = drawWidth / aspect;
-      if (drawHeight < img.naturalHeight * this.escala) {
-        drawHeight = img.naturalHeight * this.escala;
-        drawWidth = drawHeight * aspect;
-      }
-
-      const offsetX = ((outputSize - drawWidth) / 2) + (this.posX / 100) * (outputSize - drawWidth);
-      const offsetY = ((outputSize - drawHeight) / 2) + (this.posY / 100) * (outputSize - drawHeight);
+      const { drawWidth, drawHeight, offsetX, offsetY } = this.calcularLayout(img, outputSize);
 
       ctx.save();
       ctx.beginPath();
@@ -139,6 +155,16 @@ export class PersonalizarPage implements OnInit {
       ctx.clip();
       ctx.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight, offsetX, offsetY, drawWidth, drawHeight);
       ctx.restore();
+
+      if (this.textoPersonalizado.trim()) {
+        const fontSize = Math.max(20, this.tamanhoTexto * 2);
+        ctx.font = `bold ${fontSize}px Arial`;
+        ctx.fillStyle = this.corTexto;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        const textY = (this.posTextoY / 100) * outputSize;
+        ctx.fillText(this.textoPersonalizado, outputSize / 2, textY);
+      }
 
       this.imagemEstampa = canvas.toDataURL('image/png');
       await this.renderPreview();
